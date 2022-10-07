@@ -202,7 +202,7 @@ class AsmWriter:
         self._write(asm)
 
     def bootstrap(self):
-        """Generates bootstrap code for the VM"""
+        """Generates bootstrap code for the VM and writes it to `self._output_file`"""
         # set SP to 256
         asm = '''@256
         D=A
@@ -312,6 +312,8 @@ class AsmWriter:
 
     def _asm_label(self, label: str, fnret = False) -> str:
         """Generates assembly code for the label command"""
+        # if not calling or returning from a function, 
+        # format `label` according to the spec
         label_string = f"{label}" if fnret else f"{self._current_func}.{label}"
         asm = f"// label {label_string}\n"
         asm += f"({label_string})\n"
@@ -319,6 +321,8 @@ class AsmWriter:
 
     def _asm_goto(self, label: str, fnret = False) -> str:
         """Generates assembly code for the goto command"""
+        # if not calling or returning from a function, 
+        # format `label` according to the spec
         label_string = f"{label}" if fnret else f"{self._current_func}.{label}"
         asm = f"// goto {label_string}\n"
         asm += f"@{label_string}\n"
@@ -330,6 +334,8 @@ class AsmWriter:
     
     def _asm_if(self, label: str, fnret = False) -> str:
         """Generates assembly code for the if command"""
+        # if not calling or returning from a function, 
+        # format `label` according to the spec
         label_string = f"{label}" if fnret else f"{self._current_func}.{label}"
         comment = f"// if-goto {label_string}\n"
         asm = '''@SP
@@ -419,6 +425,7 @@ class AsmWriter:
             if arg1 == "static":
                 asm += '@{prefix}.{index}\nD=A\n'.format(prefix=static_prefix, index=arg2)
             else:
+                # calculate the memory address for storing the value 
                 segment = segments[arg1]
                 asm += '''@{offset}
                 D=A
@@ -428,9 +435,12 @@ class AsmWriter:
                     asm += 'D=D+A\n'
                 else:
                     asm += 'D=D+M\n'
+            # save the address in R13
             asm += '''@R13
             M=D
-            @SP
+            '''
+            # get value from the stack and copy to address stored in R13
+            asm += '''@SP
             M=M-1
             A=M
             D=M
@@ -460,7 +470,9 @@ def run(path: str):
 
     writer = AsmWriter(output_file_full_path)
 
+    # if the argument is the path to a directory, translate all files in the directory
     if os.path.isdir(path):
+        # bootstrap the VM
         writer.bootstrap()
         message = H.fancy_message(f"Translating all files in directory {path}", MT.INFO)
         print(message)

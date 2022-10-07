@@ -5,7 +5,7 @@ This is my implementation of Hack assembler which translates programs written in
 Usage:
 
 ```
-python asm2hack.py /path/to/source/file.asm
+python asm2hack.py path/to/source/file.asm
 ```
 
 ### VM Translator
@@ -15,6 +15,6 @@ Translates programs written in the VM language into Hack symbolic assembly. This
 Usage:
 
 ```
-python vmtranslator.py /path/to/source/directory
-python vmtranslator.py /path/to/source/file.vm
+python vmtranslator.py path/to/source/directory
+python vmtranslator.py path/to/source/file.vm
 ```
