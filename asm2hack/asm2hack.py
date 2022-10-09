@@ -1,6 +1,6 @@
 """Hack assembly language compiler implemented in Python 3. Requires Python 3.10+"""
 # Copyright 2022 Pavel Urusov
-# Licensed under the terms of the General Public License v2 or later 
+# Licensed under the terms of the General Public License v3 or later 
 
 import sys
 
