@@ -355,8 +355,7 @@ class AsmWriter:
         match command:
             case "add" | "sub" | "and" | "or":
                 asm += '''@SP 
-                M=M-1
-                A=M
+                AM=M-1
                 D=M
                 A=A-1
                 M={mathc}
@@ -369,8 +368,7 @@ class AsmWriter:
             case "eq" | "gt" | "lt":
                 jmp = self._current_func + '$JMP.' + str(self._jumps)
                 asm += '''@SP
-                M=M-1
-                A=M
+                AM=M-1
                 D=M
                 A=A-1
                 D=M-D
@@ -441,8 +439,7 @@ class AsmWriter:
             '''
             # get value from the stack and copy to address stored in R13
             asm += '''@SP
-            M=M-1
-            A=M
+            AM=M-1
             D=M
             @R13
             A=M
