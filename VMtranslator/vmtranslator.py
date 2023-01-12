@@ -270,7 +270,7 @@ class AsmWriter:
         M=D
         '''
         # overwrite the first argument with the return value
-        asm += self._asm_push_pop(C.POP, 'argument', 0)
+        asm += self._asm_push_pop(C.POP, 'argument', "0")
         # SP = ARG + 1
         asm += '''@ARG
         D=M+1
