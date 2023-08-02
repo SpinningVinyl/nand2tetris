@@ -1,0 +1,39 @@
+/**
+ * 8-way multiplexor:
+ * out = a if sel == 000
+ *       b if sel == 001
+ *       etc.
+ *       h if sel == 111
+ */
+
+CHIP Mux8Way {
+    IN a, b, c, d,
+       e, f, g, h,
+       sel[3];
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+    Not(in = sel[0], out = NotSel0);
+    Not(in = sel[1], out = NotSel1);
+    Not(in = sel[2], out = NotSel2);
+
+    And4Way(a = a, b = NotSel0, c = NotSel1, d = NotSel2, out = wa);
+    And4Way(a = b, b = sel[0], c = NotSel1, d = NotSel2, out = wb);
+    And4Way(a = c, b = NotSel0, c = sel[1], d = NotSel2, out = wc);
+    And4Way(a = d, b = sel[0], c = sel[1], d = NotSel2, out = wd);
+    And4Way(a = e, b = NotSel0, c = NotSel1, d = sel[2], out = we);
+    And4Way(a = f, b = sel[0], c = NotSel1, d = sel[2], out = wf);
+    And4Way(a = g, b = NotSel0, c = sel[1], d = sel[2], out = wg);
+    And4Way(a = h, b = sel[0], c = sel[1], d = sel[2], out = wh);
+
+    Or(a = wa, b = wb, out = OrAB);
+    Or(a = wc, b = wd, out = OrCD);
+    Or(a = we, b = wf, out = OrEF);
+    Or(a = wg, b = wh, out = OrGH);
+
+    Or(a = OrAB, b = OrCD, out = OrAD);
+    Or(a = OrEF, b = OrGH, out = OrEH);
+
+    Or(a = OrAD, b = OrEH, out = out);
+}

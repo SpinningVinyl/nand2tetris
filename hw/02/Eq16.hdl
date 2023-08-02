@@ -1,0 +1,48 @@
+/**
+ * 16-bit comparison:
+ * out = 1 if a = b
+ */
+
+CHIP Eq16 {
+    IN a[16], b[16];
+    OUT out;
+
+    PARTS:
+   // Put you code here:
+    Xor(a = a[0], b = b[0], out = x0);
+    Xor(a = a[1], b = b[1], out = x1);
+    Xor(a = a[2], b = b[2], out = x2);
+    Xor(a = a[3], b = b[3], out = x3);
+    Xor(a = a[4], b = b[4], out = x4);
+    Xor(a = a[5], b = b[5], out = x5);
+    Xor(a = a[6], b = b[6], out = x6);
+    Xor(a = a[7], b = b[7], out = x7);
+    Xor(a = a[8], b = b[8], out = x8);
+    Xor(a = a[9], b = b[9], out = x9);
+    Xor(a = a[10], b = b[10], out = x10);
+    Xor(a = a[11], b = b[11], out = x11);
+    Xor(a = a[12], b = b[12], out = x12);
+    Xor(a = a[13], b = b[13], out = x13);
+    Xor(a = a[14], b = b[14], out = x14);
+    Xor(a = a[15], b = b[15], out = x15);
+
+    Or(a = x0, b = x1, out = o01);
+    Or(a = x2, b = x3, out = o23);
+    Or(a = x4, b = x5, out = o45);
+    Or(a = x6, b = x7, out = o67);
+    Or(a = x8, b = x9, out = o89);
+    Or(a = x10, b = x11, out = o1011);
+    Or(a = x12, b = x13, out = o1213);
+    Or(a = x14, b = x15, out = o1415);
+
+    Or(a = o01, b = o23, out = o03);
+    Or(a = o45, b = o67, out = o47);
+    Or(a = o89, b = o1011, out = o811);
+    Or(a = o1213, b = o1415, out = o1215);
+
+    Or(a = o03, b = o47, out = o07);
+    Or(a = o811, b = o1215, out = o815);
+
+    Or(a = o07, b = o815, out = nout);
+    Not(in = nout, out = out);
+}

@@ -1,0 +1,16 @@
+/**
+ * 4-way And gate: 
+ * out = 1 if (a == 1 and b == 1 and c == 1 and d == 1)
+ *       0 otherwise
+ */
+
+CHIP And4Way {
+    IN a, b, c, d;
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+    And(a = a, b = b, out = ab);
+    And(a = c, b = d, out = cd);
+    And(a = ab, b = cd, out = out);
+}
