@@ -1,0 +1,10 @@
+// Initializes and runs a new BallMove object
+class Main {
+    function void main() {
+        var BallMove bm;
+        let bm = BallMove.new();
+        do bm.run();
+        do bm.dispose();
+        return;
+    }
+}

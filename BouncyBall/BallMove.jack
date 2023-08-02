@@ -1,0 +1,89 @@
+class BallMove {
+
+    // this fields are declared before others to make it easier to keep an eye on them in the VM Emulator :)
+    field int dX, dY;
+    field int x, y;
+
+    field Ball ball;
+    field int radius;
+
+    // the constructor
+    constructor BallMove new() {
+        let x = 48;
+        let y = 48;
+        let radius = 20;
+        let dX = -1;
+        let dY = -1;
+        let ball = Ball.new(x, y, radius);
+        return this;
+    }
+
+    method void dispose() {
+        // disposes of the ball and then deallocates itself
+        do ball.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method int abs(int n) {
+        var int res;
+        if (n < 0) { 
+            let res = -1*n ;
+        } else {
+            let res = n;
+        }
+        return res;
+    }
+
+    // move the ball to its new location
+    method void move(int x, int y) {
+        do ball.erase();
+        do ball.setCoordinates(x, y);
+        do ball.draw();
+        return;
+    }
+
+    method void bounce() {
+        var int maxX, minX, maxY, minY;
+        let minX = x - radius;
+        let maxX = x + radius;
+        let maxY = y + radius;
+        let minY = y - radius;
+        if ((maxX > (511 - dX)) | (minX < abs(dX))) {
+            let dX = -1 * dX;
+        }
+        if ((maxY > (254 - dY)) | (minY < abs(dY))) {
+            let dY = -1 * dY;
+        }
+        let x = x + dX;
+        let y = y + dY;
+        do move(x, y);
+        do Sys.wait(5);
+        return;
+    }
+
+    method void run() {
+        var char input;
+        var boolean quit;
+        let quit = false;
+        let input = 0;
+
+        while(~quit) {
+            // read the keyboard input
+            while (input = 0) {
+                let input = Keyboard.keyPressed();
+                do bounce();
+            }
+            // the Q key is pressed
+            if (input = 81) {
+                let quit = true;
+            } 
+        }
+        return;
+
+    }
+
+
+
+
+}
